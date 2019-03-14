@@ -1,0 +1,64 @@
+from tkinter import *
+import random
+import colorsys
+
+
+
+window = Tk()
+window.title("sorting")
+window.configure(background = 'black')
+
+canvas = Canvas(window, width = 1000, height = 500)
+canvas.pack()
+rect = canvas.create_rectangle(1,1,1, 1, fill = '#465199' , outline = "")
+
+m = []
+i = 0
+
+while i < 509:
+        a = random.randint(0,509)
+        if a not in m:
+                m.append(a)
+                i += 1
+
+for u in range(len(m)):
+        canvas.pack_forget()
+        canvas = Canvas(window, width = 1018, height = 500)
+        canvas.pack()
+        for t in range(0,len(m)):
+                a = 0
+                b = 0
+                c = 0
+                d = m[t] *3
+                if d < 255:
+                        a = 255
+                        b = d
+                        c = 0
+                elif d < 510:
+                        a= 255-d + 255
+                        b = 255
+                        c = 0
+                elif d < 765:
+                        a = 0
+                        b = 255
+                        c = d - 510
+                elif d < 1020:
+                        a = 0
+                        b = 255-d + 765
+                        c = 255
+                elif d < 1275:
+                        a = d - 1020
+                        b = 0
+                        c = 255
+                elif d < 1530:
+                        a = 255
+                        b = 0
+                        c = 255-d + 1275
+                rect = canvas.create_rectangle(t*2,500,t*2+2, 0, fill = '#%02X%02X%02X' % (int(a),int(b),int(c)) , outline = "")
+        ma = min(m[u::])
+        spot = m.index(ma)
+        re = m[u]
+        m[u] = ma
+        m[spot] = re
+        window.update()
+window.mainloop()
