@@ -1,0 +1,125 @@
+import pygame
+import random
+from pygame import *
+
+
+pygame.init()
+clock = pygame.time.Clock()
+sc = [0,0]
+
+def game(sc):
+        White = (255,255,255)
+        running = True
+
+        pos = 200
+        pos_change = 0
+        
+        opp = 200
+        opp_g = 200
+
+
+        t = 0
+        ball_x = 750
+        ball_y = 400
+        ch_ball_yn = random.randrange(2,15)
+        ch_ball_xn = random.randrange(5,10)
+        ch_ball_x = -ch_ball_xn
+        ch_ball_y = ch_ball_yn
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        running = False
+                #player movement change
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_DOWN:
+                                pos_change = 10
+                        if event.key == pygame.K_UP:
+                                pos_change = -10
+
+            screen = pygame.display.set_mode((800,600))
+
+            pos += pos_change                  
+            if pos <= -10:
+                pos = 0
+            if pos >= 510:
+                pos = 510
+                
+            
+            sp = ch_ball_yn - 1
+            if opp <= 15:
+                opp += sp
+            if opp >= 500:
+                opp -= sp
+            
+            if ch_ball_x > 0 and (ball_y - opp - 25) != 0:
+                opp += (ball_y - opp - 25)/(abs(ball_y - opp - 25)/sp)
+            
+
+            
+            pygame.draw.rect(screen,White, [750,opp,25,100])
+            pygame.draw.rect(screen, White , [25,pos,25,100])
+            
+            
+            
+            if ball_x >= 750:
+                if ball_y < opp +100 and ball_y > opp: 
+                        ch_ball_x = -ch_ball_xn
+            if ball_x <= 50:
+                if ball_y < pos + 100 and ball_y > pos:
+                        ch_ball_x = ch_ball_xn
+   
+                                
+            if ball_y >= 590:
+                ch_ball_y = -ch_ball_yn
+            if ball_y <= 10:
+                ch_ball_y = ch_ball_yn
+                print(opp_g)
+
+            if t % 90 == 0:
+                ch_ball_xn += 1
+            
+            ball_x += ch_ball_x
+            ball_y += ch_ball_y
+            pygame.draw.rect(screen, (255,255,255) , [ball_x,ball_y,10,10])
+            
+            basicFont = pygame.font.SysFont(None, 48)
+            text = basicFont.render(str(sc[0]) + "  :  " + str(sc[1]), True, White, None)
+            screen.blit(text,(350,0))
+            
+            pygame.display.update()
+            
+            if ball_x <= 10:
+                return [sc[0], sc[1] + 1]
+            if ball_x >= 790:
+                return [sc[0] + 1, sc[1]]
+                
+            t += 1
+            clock.tick(30)
+
+
+while max(sc) < 7:
+        sc = game(sc)
+if sc[0] > sc[1]:
+        win = "YOU WON!"   
+else:
+        win = "YOU LOST!"
+        
+        
+screen = pygame.display.set_mode((800,600))       
+basicFont = pygame.font.SysFont(None, 100)
+text = basicFont.render(win, True, (255,255,255), None)
+screen.blit(text,(250,250))
+
+basicFont = pygame.font.SysFont(None, 48)
+text = basicFont.render(str(sc[0]) + "  :  " + str(sc[1]), True, (255,255,255), None)
+screen.blit(text,(350,0))
+
+pygame.display.update()
+
+while True:
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        running = False
+
+pygame.quit()
