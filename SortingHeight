@@ -1,0 +1,34 @@
+from tkinter import *
+import random
+
+window = Tk()
+window.title("sorting")
+window.configure(background = 'black')
+
+canvas = Canvas(window, width = 1000, height = 500)
+canvas.pack()
+rect = canvas.create_rectangle(1,1,1, 1, fill = '#465199' , outline = "")
+
+m = []
+i = 0
+
+while i < 500:
+        a = random.randint(0,500)
+        if a not in m:
+                m.append(a)
+                i += 1
+
+for u in range(len(m)):
+        canvas.pack_forget()
+        canvas = Canvas(window, width = 1000, height = 500)
+        canvas.pack()
+        for t in range(0,len(m)):
+                rect = canvas.create_rectangle(t*2,500,t*2+2, 500 - m[t], fill = '#465199' , outline = "")
+        ma = min(m[u::])
+        print(m)
+        spot = m.index(ma)
+        re = m[u]
+        m[u] = ma
+        m[spot] = re
+        window.update()
+window.mainloop()
